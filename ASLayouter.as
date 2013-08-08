@@ -50,7 +50,7 @@ package aslayouter
 			
 			for (i = 0; i < layout.insts.length; i++) {
 				var obj:Object = layout.insts[i];
-				var mc:DisplayObject = obj.inst;
+				var mc = obj.inst;
 				
 				mc.x = x;
 				mc.y = y;
