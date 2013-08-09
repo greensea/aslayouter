@@ -48,7 +48,9 @@ package aslayouter
 		{
 			var ratio:Number;
 			
-			ratio = new Number(percent.split("%").join());
+			ratio = new Number(percent.split("%").join(""));
+			
+			ratio /= 100;
 			
 			return total * ratio;
 		}
