@@ -107,9 +107,9 @@ package aslayouter
 			if (autoCount > 0) {
 				autoValue = (layout[prop] - usedValue) / autoCount;
 				
-				if (autoValue < 0) {
+				if (autoValue <= 0) {
 					autoValue = 0;
-					trace("警告：在 " + layout.inst + " 的布局中，" + autoCount + " 个子布局的" + prop + " 属性的自动值小于 0");
+					trace("警告：在 " + layout.inst + " 的布局中，" + autoCount + " 个子布局的" + prop + " 属性的自动值小于等于 0");
 				}
 				
 				for (i = 0; i < layout.insts.length; i++) {
@@ -138,6 +138,7 @@ package aslayouter
 			var i:int;
 			
 			var x:int = 0, y:int = 0;
+			var lineMaxY:Number = 0;	/// 一行中的最大 Y 值
 			
 			calcLayout(layout, "width");
 			calcLayout(layout, "height");
@@ -146,16 +147,30 @@ package aslayouter
 				var obj:Object = layout.insts[i];
 				var mc = obj.inst;
 				
+				/// 换行判断
+				if (layout.width - x - obj.width < 0) {
+					y += lineMaxY;
+					x = 0;
+					lineMaxY = 0;
+				}
+				
+				
 				mc.x = x;
 				mc.y = y;
-				
 				
 				mc.width = obj.width;
 				mc.height = obj.height;
 				
 				trace(obj + " mc.width set to " + mc.width)
 				
+				
 				x += mc.width;
+				
+				if (lineMaxY < obj.height) {
+					lineMaxY = obj.height;
+				}
+				
+				
 			}
 		}
 
