@@ -17,6 +17,8 @@ package aslayouter
 		public static const AUTO:String = "auto";
 		public static const FULL:String = "full";
 		public static const INHERIT:String = "inherit";
+		public static const NONE:String = "none";
+		public static const NORMAL:String = "normal";
 		
 		private var _x:Number = 0;
 		private var _y:Number = 0;
@@ -105,8 +107,12 @@ package aslayouter
 				return;
 			}
 			
-			for (i = 0; i < layout.insts.length; i++) {
+			for (i = 0; i < layout.insts.length; i++) {				
 				obj = layout.insts[i];
+				
+				if (obj.display == NONE) {
+					continue;
+				}
 				
 				/// 默认值是 INHERIT，即不改变原始值
 				if (obj[prop] == undefined) {
@@ -171,6 +177,17 @@ package aslayouter
 				return;
 			}
 			
+			
+			/// 判断 display 属性，如果为 NONE 则不需要显示
+			if (_layout.display == NONE) {
+				if (_layout.inst != null) {
+					_layout.inst.visible = false;
+				}
+				
+				return;
+			}
+
+			
 			redrawLayout();
 		}
 		
@@ -219,7 +236,14 @@ package aslayouter
 			
 			for (i = 0; i < layout.insts.length; i++) {
 				var obj:Object = layout.insts[i];
-				var l:ASLayouter = new ASLayouter();
+				var l:ASLayouter;
+				
+				if (obj.display == NONE) {
+					continue;
+				}
+				
+				
+				l = new ASLayouter();
 				
 				x += obj.__marginLeft;
 				
@@ -296,6 +320,16 @@ package aslayouter
 				if (_layout.insts[i].marginBottom == undefined) {
 					_layout.insts[i].marginBottom = 0;
 				}
+if (_layout.insts[i].name == "danmuStyle") {
+	trace(_layout.insts[i].name);
+}
+				if (_layout.insts[i].visible == undefined) {
+					_layout.insts[i].visible = true;
+				}
+				if (_layout.insts[i].display == undefined) {
+					_layout.insts[i].display = NORMAL;
+				}
+			
 			}
 			
 			
