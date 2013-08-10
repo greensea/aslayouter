@@ -75,7 +75,6 @@ package aslayouter
 				return;
 			}
 			
-			
 			var propValue:Number = 0;
 			if (prop == "width") {
 				propValue = _w;
@@ -84,6 +83,22 @@ package aslayouter
 			else if (prop == "height") {
 				propValue = _h;
 				propName = "__height"
+			}
+			else if (prop == "marginLeft") {
+				propValue = 0;
+				propName = "__marginLeft";
+			}
+			else if (prop == "marginRight") {
+				propValue = 0;
+				propName = "__marginRight";
+			}
+			else if (prop == "marginTop") {
+				propValue = 0;
+				propName = "__marginTop";
+			}
+			else if (prop == "marginBottom") {
+				propValue = 0;
+				propName = "__marginBottom";
 			}
 			else {
 				throw(propName + " 属性未定义");
@@ -108,6 +123,8 @@ package aslayouter
 				else if (obj[prop] == INHERIT) {
 					obj[propName] = obj.inst[prop];
 				}
+				else if (obj[prop] == AUTO) {
+				}
 				else {
 					obj[propName] = obj[prop];
 				}
@@ -119,6 +136,8 @@ package aslayouter
 				else {
 					autoCount++;
 				}
+				usedValue += obj.__marginLeft;
+				usedValue += obj.__marginRight;
 			}
 			
 			/// 设定 AUTO 元素的大小
@@ -170,12 +189,15 @@ package aslayouter
 			var x:int = 0, y:int = 0;
 			var lineMaxY:Number = 0;	/// 一行中的最大 Y 值
 			
-			if (layout.name == "root") {
-				trace("");
-			}
-			
+
+			/// 计算各种属性
+			calcLayout(layout, "marginLeft");
+			calcLayout(layout, "marginRight");
+			calcLayout(layout, "marginTop");
+			calcLayout(layout, "marginBottom");
 			calcLayout(layout, "width");
 			calcLayout(layout, "height");
+			
 			
 			trace("layout <" + layout.name + ">: width=" + layout.__width + ", height=" + layout.__height);
 			
@@ -189,6 +211,8 @@ package aslayouter
 			for (i = 0; i < layout.insts.length; i++) {
 				var obj:Object = layout.insts[i];
 				var l:ASLayouter = new ASLayouter();
+				
+				x += obj.__marginLeft;
 				
 				/// 换行判断
 				if (_w - x - obj.__width < 0) {
@@ -208,7 +232,7 @@ package aslayouter
 					p = obj.inst.parent.globalToLocal(new Point(x + _x, y + _y));
 				}
 				l.x = p.x;
-				l.y = p.y;
+				l.y = p.y + obj.__marginTop;
 				
 				trace("layout pos <" + obj.name + ">: x=" + p.x + ", y=" + p.y);
 				
@@ -224,9 +248,10 @@ package aslayouter
 				
 				/// 计算下一个元素的坐标
 				x += obj.__width;
+				x += obj.__marginRight;
 				
 				if (lineMaxY < obj.__height) {
-					lineMaxY = obj.__height;
+					lineMaxY = obj.__height + obj.__marginBottom;
 				}
 			}
 		}
@@ -240,18 +265,29 @@ package aslayouter
 			
 			var i:int;
 			
-			if (_layout != null) {
-				/// FIXME: 销毁现有的对象
-			}
-			
 			_layout = layout;
 			
-			
-			/// 创建子布局的类
-			
+
 			if (!_layout.insts) {
 				_layout.insts = new Array();
 			}
+			
+			for (i = 0; i < _layout.insts.length; i++) {
+				/// 初始未指定的属性的默认值
+				if (_layout.insts[i].marginLeft== undefined) {
+					_layout.insts[i].marginLeft = 0;
+				}
+				if (_layout.insts[i].marginRight == undefined) {
+					_layout.insts[i].marginRight = 0;
+				}
+				if (_layout.insts[i].marginTop == undefined) {
+					_layout.insts[i].marginTop = 0;
+				}
+				if (_layout.insts[i].marginBottom == undefined) {
+					_layout.insts[i].marginBottom = 0;
+				}
+			}
+			
 			
 			redraw();
 		}
