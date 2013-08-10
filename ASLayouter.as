@@ -179,10 +179,12 @@ package aslayouter
 			
 			trace("layout <" + layout.name + ">: width=" + layout.__width + ", height=" + layout.__height);
 			
-			layout.inst.width = layout.__width;
-			layout.inst.height = layout.__height;
-			layout.inst.x = _x;
-			layout.inst.y = _y;
+			if (layout.inst != null) {
+				layout.inst.width = layout.__width;
+				layout.inst.height = layout.__height;
+				layout.inst.x = _x;
+				layout.inst.y = _y;
+			}
 			
 			for (i = 0; i < layout.insts.length; i++) {
 				var obj:Object = layout.insts[i];
@@ -199,11 +201,11 @@ package aslayouter
 				/// 设置坐标
 				var p:Point;
 				
-				if (layout.inst == null) {
+				if (obj.inst == null) {
 					p = new Point(x, y);
 				}
 				else {
-					p = layout.inst.globalToLocal(new Point(x + _x, y + _y));
+					p = obj.inst.parent.globalToLocal(new Point(x + _x, y + _y));
 				}
 				l.x = p.x;
 				l.y = p.y;
