@@ -201,11 +201,20 @@ package aslayouter
 			
 			trace("layout <" + layout.name + ">: width=" + layout.__width + ", height=" + layout.__height);
 			
+			if (layout.name == "replay") {
+				trace("");
+			}
+			
 			if (layout.inst != null) {
 				layout.inst.width = layout.__width;
 				layout.inst.height = layout.__height;
 				layout.inst.x = _x;
 				layout.inst.y = _y;
+				
+				/// 设置显示属性
+				if (layout.visible !== undefined) {
+					layout.inst.visible = layout.visible;
+				}
 			}
 			
 			for (i = 0; i < layout.insts.length; i++) {
@@ -240,6 +249,7 @@ package aslayouter
 				/// 设置大小
 				l.width = obj.__width;
 				l.height = obj.__height;
+					
 				
 				
 				/// 设置布局
