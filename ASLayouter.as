@@ -189,7 +189,7 @@ package aslayouter
 				var l:ASLayouter = new ASLayouter();
 				
 				/// 换行判断
-				if (layout.__width - x - obj.__width < 0) {
+				if (_w - x - obj.__width < 0) {
 					y += lineMaxY;
 					x = 0;
 					lineMaxY = 0;
