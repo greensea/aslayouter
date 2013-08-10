@@ -226,7 +226,7 @@ package aslayouter
 				var p:Point;
 				
 				if (obj.inst == null) {
-					p = new Point(x, y);
+					p = new Point(x + _x, y + _y);
 				}
 				else {
 					p = obj.inst.parent.globalToLocal(new Point(x + _x, y + _y));
